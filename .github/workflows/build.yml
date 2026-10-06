@@ -1,0 +1,42 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 装 MSVC 环境
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: 编译（静态链接 CRT）
+        shell: cmd
+        run: |
+          if not exist build mkdir build
+          cl /nologo /utf-8 /O2 /MT /W3 /EHsc /D_CRT_SECURE_NO_WARNINGS /Fe:fp.exe /Fo:build\ ^
+             src\main.cpp user32.lib gdi32.lib d3d11.lib dxgi.lib d3dcompiler.lib
+
+      - name: 传成 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fp-meadow-win64
+          path: fp.exe
+
+      - name: 打 tag 的时候顺手发一个 Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ver = "${{ github.ref_name }}"
+          Compress-Archive -Path fp.exe, README.md, LICENSE -DestinationPath "fp-meadow-$ver-win64.zip" -Force
+          gh release create $ver "fp-meadow-$ver-win64.zip" --title "fp-meadow $ver" --generate-notes

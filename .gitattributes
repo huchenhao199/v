@@ -1,0 +1,19 @@
+# 默认：仓库里统一用 LF，checkout 的时候按平台转换
+* text=auto
+
+# .bat 必须是 CRLF，cmd.exe 才认（尤其是 goto/label）
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 源码和文档
+*.cpp text
+*.h   text
+*.py  text
+*.md  text
+*.yml text
+
+# 二进制
+*.png binary
+*.tga binary
+*.zip binary
+*.exe binary

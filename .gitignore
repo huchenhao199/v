@@ -1,0 +1,27 @@
+# 编译产物
+build/
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.tga
+*.log
+
+# 发布打包出来的 zip
+*.zip
+
+# 我自己留的源码快照，不进仓库
+backups/
+*.bak
+*.bak[0-9]*
+*.ok
+*.broken-backup
+
+# 编辑器和系统垃圾
+.vs/
+.vscode/
+*.suo
+*.user
+Thumbs.db
+desktop.ini
+__pycache__/
