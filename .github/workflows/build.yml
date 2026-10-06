@@ -7,6 +7,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# 打 tag 的时候要用 GITHUB_TOKEN 建 Release，所以要写权限
+permissions:
+  contents: write
+
 jobs:
   windows:
     runs-on: windows-latest
